@@ -12,7 +12,18 @@
     
     <input type="radio" class="btn-check" name="MascotasOptions" id="gatosOption" autocomplete="off" value="gato">
     <label class="btn btn-outline-primary" for="gatosOption">Gatos</label>
-    
+
+    <div class="mb-3">
+        <label for="selectRaza" class="form-label">Selecciona una raza:</label>
+        <select id="selectRaza" class="form-select">
+            <option value="">Cargando razas...</option>
+        </select>
+        <div id="detalleRaza" class="card shadow-sm d-none">
+            <div id="cardRaza" class="card-body text-center">
+                <!-- Aquí se generan los cards dinámicamente -->
+            </div>
+        </div>
+    </div>
     <script src="./js/indexJS.js"></script>
 </body>
 </html>
