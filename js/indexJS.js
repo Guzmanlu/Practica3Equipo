@@ -20,13 +20,18 @@ window.addEventListener("load", () => {
 
     function manejarCambiosOpcionesTipo() {
         let mascotaSeleccionada = document.querySelector('input[name="MascotasOptions"]:checked');
-        if (mascotaSeleccionada) {
-            selectRaza.innerHTML = '<option value="">Cargando...</option>';
-            cardRaza.innerHTML = "";
-            objeto = factory.crear(mascotaSeleccionada.value);
-            objeto.configurarSelect();
+        if(mascotaSeleccionada.value=="perro"){
+               labelFiltro1.textContent="Breed Group";
+               labelFiltro2.textContent="Temperament";
+          }
+                else{
+                      labelFiltro1.textContent="Temperament";
+                      labelFiltro2.textContent="Child Friendly (1-5)";
+                    }
+
+                filtrosBusqueda.classList.remove("d-none");
         }
-    }
+    
 
     selectRaza.addEventListener("change", () => {
         if (objeto && selectRaza.value) {
