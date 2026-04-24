@@ -11,6 +11,12 @@ window.addEventListener("load", () => {
     let razaAmistoso = document.getElementById("razaAmistoso");
     let razaImagen = document.getElementById("razaImagen");
     let cardRaza = document.getElementById("cardRaza");
+    let filtrosBusqueda = document.getElementById("filtrosBusqueda");
+    let filtro1 = document.getElementById("filtro1");
+    let filtro2 = document.getElementById("filtro2");
+    let labelFiltro1 = document.getElementById("labelFiltro1");
+    let labelFiltro2 = document.getElementById("labelFiltro2");
+    let btnBuscar = document.getElementById("btnBuscar");
 
     function manejarCambiosOpcionesTipo() {
         let mascotaSeleccionada = document.querySelector('input[name="MascotasOptions"]:checked');
