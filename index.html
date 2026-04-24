@@ -1,50 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adopcion de mascotas virtuales</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adopcion de mascotas virtuales</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./js/indexJS.js"></script>
 </head>
-<body>
-    <input type="radio" class="btn-check" name="MascotasOptions" id="perrosOption" autocomplete="off" value="perro">
-    <label class="btn btn-outline-primary" for="perrosOption">Perros</label>
-    
-    <input type="radio" class="btn-check" name="MascotasOptions" id="gatosOption" autocomplete="off" value="gato">
-    <label class="btn btn-outline-primary" for="gatosOption">Gatos</label>
 
-    <div class="mb-3">
-        <label for="selectRaza" class="form-label">Selecciona una raza:</label>
-        <select id="selectRaza" class="form-select">
-            <option value="">Cargando razas...</option>
-        </select>
-        <div id="detalleRaza" class="card shadow-sm d-none">
-            <div id="cardRaza" class="card-body text-center">
-                <!-- Aquí se generan los cards dinámicamente -->
-            </div>
-        </div>
+<body class="bg-light">
+  <div class="container py-2" style="max-width: 1000px;">
+    <!-- Título principal -->
+    <h1 class="text-center mb-4" id="tituloPrincipal">Busca un animalito para adoptar</h1>
+
+    <!-- Botones de selección -->
+    <div class="d-flex justify-content-center gap-3 mb-4">
+      <input type="radio" class="btn-check" name="MascotasOptions" id="perrosOption" autocomplete="off" value="perro">
+      <label class="btn btn-outline-primary" for="perrosOption">Perros</label>
+
+      <input type="radio" class="btn-check" name="MascotasOptions" id="gatosOption" autocomplete="off" value="gato">
+      <label class="btn btn-outline-primary" for="gatosOption">Gatos</label>
     </div>
-    <script src="./js/indexJS.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <div class="modal fade" id="modalAdopcion" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Confirmación de Adopción</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p id="mensajeModal">¿Deseas confirmar la adopción de esta mascota?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" onclick="alert('¡Adopción confirmada!')">Confirmar</button>
+
+    <div class="mb-4">
+      <label for="selectRaza" class="form-label fw-bold">Selecciona una raza:</label>
+      <select id="selectRaza" class="form-select">
+        <option value="">Selecciona una raza</option>
+      </select>
+    </div>
+
+
+    <div id="detalleRaza" class="card shadow-sm d-none">
+      <div id="cardRaza" class="card-body">
+        <!-- Aquí se generan los cards dinámicamente -->
       </div>
     </div>
   </div>
-</div>
 
-    
+  <!-- Modal -->
+  <div class="modal fade" id="modalAdopcion" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirmación de Adopción</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p id="mensajeModal">¿Deseas confirmar la adopción de esta mascota?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="alert('¡Adopción confirmada!')">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </body>
+
 </html>

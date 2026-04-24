@@ -117,6 +117,33 @@ class perro extends mascota {
     }
 }
 
+// Agrega esta función auxiliar antes de la clase gato
+function generarEstrellas(valor) {
+    const maxEstrellas = 5;
+    let estrellasHTML = '';
+
+    // Validar que valor sea un número válido (1-5)
+    let puntuacion = parseInt(valor);
+    if (isNaN(puntuacion) || puntuacion < 0) {
+        puntuacion = 0;
+    }
+    if (puntuacion > 5) {
+        puntuacion = 5;
+    }
+
+    for (let i = 1; i <= maxEstrellas; i++) {
+        if (i <= puntuacion) {
+            // Estrella llena (dorada)
+            estrellasHTML += '<span style="color: #FFD700; font-size: 1.2rem;">★</span>';
+        } else {
+            // Estrella vacía (gris)
+            estrellasHTML += '<span style="color: #D3D3D3; font-size: 1.2rem;">☆</span>';
+        }
+    }
+
+    return estrellasHTML;
+}
+
 class gato extends mascota {
     constructor() {
         super();
@@ -149,43 +176,60 @@ class gato extends mascota {
     }
     mostrarDetalles(raza) {
 
+        // Generar estrellas para child_friendly
+        let estrellasHTML = generarEstrellas(raza.child_friendly);
+
         let cardRaza = document.getElementById("cardRaza");
         cardRaza.innerHTML = `
-            <h2 id="razaNombre" class="card-title text-primary"></h2>
-                <p>
-                    <strong>Descripción:</strong>
-                    <span id="razaDescripcion"></span>
-                </p>
-                <p>
-                    <strong>Peso:</strong>
-                    <span id="razaPeso"></span>
-                    kg
-                </p>
-                <p>
-                    <strong>Temperamento:</strong>
-                    <span id="razaTemperamento"></span>
-                </p>
-                <p>
-                    <strong>Child_Friendly:</strong>
-                    <span id="razaAmistoso"></span>
-                </p>
-                <img id="razaImagen" class="img-fluid rounded" alt="Imagen de la raza">
-                <br>
-                <br>
-                <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalAdopcion"
-             onclick="document.getElementById('mensajeModal').innerText = '¿Estás seguro de que quieres adoptar un ${raza.name}?'">
-             ADOPTAR
-             </button>
-        `;
-        razaNombre.textContent = raza.name;
-        razaDescripcion.textContent = raza.description || "No disponible";
-        razaPeso.textContent = raza.weight.metric;
-        razaTemperamento.textContent = raza.temperament;
-        razaAmistoso.textContent = raza.child_friendly;
+        <h2 id="razaNombre" class="card-title text-primary text-center mb-3">${raza.name}</h2>
+        
+        <div class="text-start">
+            <p><strong>Descripción:</strong> <span id="razaDescripcion">${raza.description || "No disponible"}</span></p>
+            <p><strong>Peso:</strong> <span id="razaPeso">${raza.weight.metric}</span> kg</p>
+            <p><strong>Temperamento:</strong> <span id="razaTemperamento">${raza.temperament || "No disponible"}</span></p>
+            <p>
+                <strong>Child Friendly:</strong> 
+                <span id="razaAmistoso">${estrellasHTML}</span>
+                <span class="text-muted ms-2">(${raza.child_friendly || 0}/5)</span>
+            </p>
+        </div>
+        
+        <img id="razaImagen" class="img-fluid rounded mt-3" alt="Imagen de la raza" style="max-height: 300px;">
+        <br><br>
+        <div class="text-center">
+            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalAdopcion"
+                    onclick="document.getElementById('mensajeModal').innerText = '¿Estás seguro de que quieres adoptar un ${raza.name}?'">
+                ADOPTAR
+            </button>
+        </div>
+    `;
 
-        razaImagen.src = `https://cdn2.thecatapi.com/images/${raza.reference_image_id}.jpg`;
+        // Asignar valores a los spans
+        document.getElementById("razaDescripcion").textContent = raza.description || "No disponible";
+        document.getElementById("razaPeso").textContent = raza.weight.metric;
+        document.getElementById("razaTemperamento").textContent = raza.temperament || "No disponible";
+        document.getElementById("razaImagen").src = `https://cdn2.thecatapi.com/images/${raza.reference_image_id}.jpg`;
+
         detalleRaza.classList.remove("d-none");
     }
+}
+
+function generarEstrellas(valor) {
+    const maxEstrellas = 5;
+    let puntuacion = parseInt(valor);
+    if (isNaN(puntuacion) || puntuacion < 0) puntuacion = 0;
+    if (puntuacion > 5) puntuacion = 5;
+
+    let estrellasHTML = '';
+    for (let i = 1; i <= maxEstrellas; i++) {
+        if (i <= puntuacion) {
+            estrellasHTML += '<i class="bi bi-star-fill" style="color: #FFD700;"></i>';
+        } else {
+            estrellasHTML += '<i class="bi bi-star" style="color: #D3D3D3;"></i>';
+        }
+    }
+
+    return estrellasHTML;
 }
 
 class mascotaFactory {
