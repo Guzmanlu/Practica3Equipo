@@ -302,6 +302,26 @@ class gato extends mascota {
 
         detalleRaza.classList.remove("d-none");
     }
+
+    filtrarRazas(temperamento, childFriendly){
+
+return this.razas.filter(raza=>{
+
+let cumpleTemperamento =
+!temperamento ||
+(raza.temperament &&
+raza.temperament.toLowerCase().includes(temperamento));
+
+let cumpleChild=
+!childFriendly ||
+String(raza.child_friendly)===childFriendly;
+
+return cumpleTemperamento && cumpleChild;
+
+});
+
+}
+    
 }
 
 function generarEstrellas(valor) {
