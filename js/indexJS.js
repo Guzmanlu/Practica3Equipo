@@ -46,6 +46,27 @@ window.addEventListener("load", () => {
     botonesRadio.forEach(radio => {
         radio.addEventListener('change', manejarCambiosOpcionesTipo);
     });
+
+    btnBuscar.addEventListener("click", ()=>{
+
+    if(!objeto || !objeto.razas) return;
+
+    let valor1 = filtro1.value.toLowerCase();
+    let valor2 = filtro2.value.toLowerCase();
+
+    let resultados = objeto.filtrarRazas(valor1, valor2);
+
+    selectRaza.innerHTML='<option value="">Resultados encontrados</option>';
+
+    resultados.forEach(raza=>{
+        let option=document.createElement("option");
+        option.value=raza.id;
+        option.textContent=raza.name;
+        selectRaza.appendChild(option);
+    });
+
+});
+    
 });
 
 class mascota {
