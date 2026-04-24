@@ -177,6 +177,27 @@ class perro extends mascota {
         razaImagen.src = raza.image?.url || "";
         detalleRaza.classList.remove("d-none");
     }
+
+    filtrarRazas(grupo, temperamento){
+
+return this.razas.filter(raza=>{
+
+let cumpleGrupo =
+ !grupo ||
+ (raza.breed_group &&
+ raza.breed_group.toLowerCase().includes(grupo));
+
+let cumpleTemperamento=
+ !temperamento ||
+ (raza.temperament &&
+ raza.temperament.toLowerCase().includes(temperamento));
+
+return cumpleGrupo && cumpleTemperamento;
+
+});
+
+}
+    
 }
 
 function generarEstrellas(valor) {
