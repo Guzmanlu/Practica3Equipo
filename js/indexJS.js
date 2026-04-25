@@ -209,7 +209,7 @@ class perro extends mascota {
             <p><span id="razaAltura"></span></p>
             <p><span id="razaPeso"></span></p>
             <p><span id="razaTemperamento"></span></p>
-            <img id="razaImagen">
+            <img id="razaImagen" class="img-fluid rounded">
             <button data-bs-toggle="modal" data-bs-target="#modalAdopcion">ADOPTAR</button>
         `;
 
@@ -239,23 +239,28 @@ class perro extends mascota {
 class gato extends mascota {
     constructor() {
         super();
-        this.razas = []; // corregido
+        this.razas = [];
         document.getElementById("selectRaza").innerHTML = '<option>Cargando...</option>';
     }
 
     async configurarSelect() {
-        const response = await fetch(`https://api.thecatapi.com/v1/breeds`);
-        this.razas = await response.json();
+        try {
+            const apiKeyGatos = "live_tfX52WCv4R14V1RMl9KjmrlFvJG5gCgc7rCA8Xq93M83nChejHdM8VzWzkrfaGDF";
+            const response = await fetch(`https://api.thecatapi.com/v1/breeds?api_key=${apiKeyGatos}`);
+            this.razas = await response.json();
 
-        let selectRaza = document.getElementById("selectRaza");
-        selectRaza.innerHTML = '<option value="">Selecciona una raza</option>';
+            let selectRaza = document.getElementById("selectRaza");
+            selectRaza.innerHTML = '<option value="">Selecciona una raza</option>';
 
-        this.razas.forEach(raza => {
-            let option = document.createElement("option");
-            option.value = raza.id;
-            option.textContent = raza.name;
-            selectRaza.appendChild(option);
-        });
+            this.razas.forEach(raza => {
+                let option = document.createElement("option");
+                option.value = raza.id;
+                option.textContent = raza.name;
+                selectRaza.appendChild(option);
+            });
+        } catch (error) {
+            console.error("Error cargando gatos:", error);
+        }
     }
 
     obtenerDatosRaza(id) {
@@ -264,15 +269,30 @@ class gato extends mascota {
 
     mostrarDetalles(raza) {
         let mascotaSeleccionada = document.querySelector('input[name="MascotasOptions"]:checked');
-
         let cardRaza = document.getElementById("cardRaza");
+
+        let urlImagen = "";
+        if (raza.image && raza.image.url) {
+            urlImagen = raza.image.url;
+        } else if (raza.reference_image_id) {
+            urlImagen = `https://cdn2.thecatapi.com/images/${raza.reference_image_id}.jpg`;
+        } else {
+            urlImagen = "https://via.placeholder.com/300?text=Gato+sin+foto";
+        }
+
         cardRaza.innerHTML = `
             <h2>${raza.name}</h2>
-            <p>${raza.description}</p>
-            <button data-bs-toggle="modal" data-bs-target="#modalAdopcion">ADOPTAR</button>
+            <p><strong>Descripción:</strong> ${raza.description || "No disponible"}</p>
+            <p><strong>Temperamento:</strong> ${raza.temperament || "Tranquilo"}</p>
+            <p><strong>Origen:</strong> ${raza.origin || "Desconocido"}</p>
+            <p><strong>Nivel Infantil:</strong> ${generarEstrellas(raza.child_friendly)}</p>
+            <img src="${urlImagen}" style="width: 100%; border-radius: 10px; margin-top: 10px;">
+            <br><br>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdopcion">ADOPTAR</button>
         `;
 
-        document.getElementById("confirmarAdopcion").onclick = function () {
+        document.getElementById("confirmarAdopcion").onclick = () => {
+            raza.image = { url: urlImagen };
             objeto.adoptar(raza, mascotaSeleccionada.value);
         };
 
@@ -281,7 +301,7 @@ class gato extends mascota {
 
     filtrarRazas(t, c) {
         return this.razas.filter(r =>
-            (!t || r.temperament?.toLowerCase().includes(t)) &&
+            (!t || (r.temperament && r.temperament.toLowerCase().includes(t))) &&
             (!c || r.child_friendly == c)
         );
     }
