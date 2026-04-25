@@ -2,6 +2,7 @@ let objeto;
 
 window.addEventListener("load", () => {
     const factory = new mascotaFactory();
+
   mostrarAdopciones();
     let selectRaza = document.getElementById("selectRaza");
     let detalleRaza = document.getElementById("detalleRaza");
@@ -72,36 +73,97 @@ function mostrarAdopciones() {
 
     let adopciones = JSON.parse(localStorage.getItem("adopciones")) || [];
 
-    adopciones.forEach(mascota => {
-        let li = document.createElement("li");
-        li.className = "list-group-item";
+    if (adopciones.length === 0) {
+        lista.innerHTML = `<li class="list-group-item text-muted">Aún no has adoptado ninguna mascota</li>`;
+        return;
+    }
 
-        li.textContent = `${mascota.name} (${mascota.tipo})`;
+    adopciones.forEach((mascota, index) => {
+        const imagenUrl = mascota.image?.url || 
+                         (mascota.tipo === "gato" ? "https://via.placeholder.com/60?text=Gato" : 
+                         "https://via.placeholder.com/60?text=Perro");
+
+        let li = document.createElement("li");
+        li.className = "list-group-item d-flex align-items-center gap-3";
+
+        li.innerHTML = `
+            <img src="${imagenUrl}" 
+                 alt="${mascota.nombre}" 
+                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+            
+            <div class="flex-grow-1">
+                <strong>${mascota.nombre}</strong> (${mascota.tipo})
+                <br>
+                <small class="text-muted">${mascota.name}</small>
+            </div>
+
+            <button class="btn btn-danger btn-sm" data-index="${index}">
+                <i class="bi bi-trash"></i>
+            </button>
+        `;
 
         lista.appendChild(li);
     });
+
+    // Agregar eventos de eliminación
+    document.querySelectorAll('#listaAdopciones button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            eliminarMascota(index);
+        });
+    });
+}
+function eliminarMascota(index) {
+    if (!confirm("¿Estás seguro de que deseas eliminar esta mascota adoptada?")) {
+        return;
+    }
+
+    let adopciones = JSON.parse(localStorage.getItem("adopciones")) || [];
+    const nombre = adopciones[index].nombre;
+
+    adopciones.splice(index, 1);
+    localStorage.setItem("adopciones", JSON.stringify(adopciones));
+
+    alert(`Se eliminó a ${nombre}`);
+    mostrarAdopciones();
 }
 
 
 
 class mascota {
     adoptar(raza, tipo) {
-        let adopciones = JSON.parse(localStorage.getItem("adopciones")) || [];
-        let cardRaza = document.getElementById("cardRaza");
+        const nombrePersonalizado = document.getElementById("nombreMascota").value.trim();
 
-        let mascota = adopciones.find(item => item.id === raza.id);
-
-        if (mascota) {
-            alert('ERROR: Ya Fue Adoptado');
-        } else {
-            raza['tipo'] = tipo;
-            adopciones.push(raza);
-
-            localStorage.setItem("adopciones", JSON.stringify(adopciones));
-
-            alert('¡Adopción confirmada!');
-            cardRaza.innerHTML = "";
+        if (!nombrePersonalizado) {
+            alert("Por favor, dale un nombre a tu mascota.");
+            return;
         }
+
+        let adopciones = JSON.parse(localStorage.getItem("adopciones")) || [];
+
+        // Verificar si ya fue adoptada
+        if (adopciones.some(item => item.id === raza.id)) {
+            alert('¡Esta mascota ya fue adoptada!');
+            return;
+        }
+
+        // Crear objeto con nombre personalizado
+        const mascotaAdoptada = {
+            ...raza,
+            tipo: tipo,
+            nombre: nombrePersonalizado,           // ← Nuevo
+            fechaAdopcion: new Date().toISOString()
+        };
+
+        adopciones.push(mascotaAdoptada);
+        localStorage.setItem("adopciones", JSON.stringify(adopciones));
+
+        alert(`¡${nombrePersonalizado} ha sido adoptado con éxito! ❤️`);
+
+        // Limpiar modal y detalle
+        document.getElementById("nombreMascota").value = "";
+        document.getElementById("cardRaza").innerHTML = "";
+
         mostrarAdopciones();
     }
 }
